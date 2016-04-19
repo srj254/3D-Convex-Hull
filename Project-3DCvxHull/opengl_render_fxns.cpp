@@ -24,26 +24,30 @@ void changeSize(int w, int h)
 
 float triColor[] = {
 	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
-	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
-	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
-	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
-	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
-	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
-	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
-	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
-	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
-	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
-	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
-	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
-	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
-	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
-	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
-	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
-	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
-	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
 };
+//	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
+//	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
+//	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
+//};
+//0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
+//	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
+//	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
+//	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
+//	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
+//	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
+//	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
+//	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
+//	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
+//	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
+//	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
+//	1.0, 0.0, 0.0, 1.0,	// Right - Top - Front		(White)
+//	0.0, 1.0, 0.0, 1.0, // Right - Top - Back		(Yellow)
+//	0.0, 0.0, 1.0, 1.0,	// Right - Top - Front		(White)
+//};
 
-float linecolor[] = { 1.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5,
+float linecolor[] = { 
+1.0, 0.0, 0.0, 0.5,
+1.0, 0.0, 0.0, 0.5,
 0.0, 1.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5,
 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
@@ -52,6 +56,7 @@ float linecolor[] = { 1.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5,
 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
 
+float mytri[4] = { 1.0, 0.0, 0.0, 0.5 };
 /** Function invoked for drawing using OpenGL */
 void display()
 {
@@ -69,8 +74,8 @@ void display()
 	glLoadIdentity();
 
 	/* Draw the cube */
-	glTranslatef(0, 0, -12);
-	glPointSize(30);
+	glTranslatef(0, 0, -20);
+	glPointSize(10);
 
 	if (b_rotate)
 	{
@@ -80,48 +85,61 @@ void display()
 	else
 		glRotatef(angle, 0.8, -0.5, 0.5);
 
-
-	// Get the Faces and lines
-	if (true)
+	
 	{
-		/* Enable clients */
+		getPtsInArray(); // Get the points
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_COLOR_ARRAY);
-
+		{
+			if (nPts > 0)
+			{
+				glVertexPointer(3, GL_FLOAT, 0, pointArray);
+				glColorPointer(4, GL_FLOAT, 0, linecolor);
+				glDrawElements(GL_POINTS, nPts, GL_UNSIGNED_BYTE, ptIndex);
+			}
+		}
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	
+	// Get the Faces and lines
+	{
 		getFacesInArray();
 		if (nFaces > 0)
 		{
-			if (b_wireframe)
+			if (!b_wireframe)
 			{
-				glVertexPointer(3, GL_FLOAT, 0, pointArray);
-				glColorPointer(4, GL_FLOAT, 0, triColor);
-				glDrawElements(GL_TRIANGLES, 3 * nFaces, GL_UNSIGNED_BYTE, hullFaces);
+				for (int i = 0; i < nFaces-5; i++)
+				{
+					/* Enable clients */
+					glEnableClientState(GL_VERTEX_ARRAY);
+					glEnableClientState(GL_COLOR_ARRAY);
+
+					glVertexPointer(3, GL_FLOAT, 0, pointArray);
+					glColorPointer(4, GL_FLOAT, 0, triColor);
+					glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+									hullFaces + (3*i));
+					glDisableClientState(GL_COLOR_ARRAY);
+					glDisableClientState(GL_VERTEX_ARRAY);
+					
+				}
 			}
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_COLOR_ARRAY);
 
 			glVertexPointer(3, GL_FLOAT, 0, pointArray);
 			glColorPointer(4, GL_FLOAT, 0, linecolor);
 			glDrawElements(GL_LINES, 2 * nHEdges, GL_UNSIGNED_BYTE, hullEdges);
+
+			/* Disable clients */
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_COLOR_ARRAY);
+
 		}
-		/* Disable clients */
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_COLOR_ARRAY);
 
 	}
 
-	getPtsInArray(); // Get the points
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-	{
-		if (nPts > 0)
-		{
-			glVertexPointer(3, GL_FLOAT, 0, pointArray);
-			glColorPointer(4, GL_FLOAT, 0, linecolor);
-			glDrawElements(GL_POINTS, nPts, GL_UNSIGNED_BYTE, ptIndex);
-		}
-	}
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	
+
 	glFlush();
 
 	/* Swap buffers for animation */
@@ -144,11 +162,12 @@ void idle()
 void init()
 {
 	/* Set clear color */
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glClearDepth(1.0);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
-	glEnable(GL_BLEND);
-	
 	/* Enable the depth buffer */
 	glEnable(GL_DEPTH_TEST);
+
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 }

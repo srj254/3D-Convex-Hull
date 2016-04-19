@@ -8,6 +8,7 @@
 #include "Halfedge.h"
 #include "ConflictGraph.h"
 #include "menu.h"
+#include "StateObject.h"
 
 using namespace std;
 
@@ -47,7 +48,6 @@ err_code draw_3dHull()
 	pt_excl.push_back(pts.v_pts[1]);
 	pt_excl.push_back(pts.v_pts[2]);
 	
-	// Store a state here
 	err_status = cnflct_graph.update(pts.v_pts, faces.v_faces, pt_excl);
 	if (E_SUCCESS != err_status)
 	{
@@ -55,7 +55,11 @@ err_code draw_3dHull()
 		exit(0);
 	}
 
-	// Store a state here
+	{
+		StateObject		S;
+		S.store_faces(faces.v_faces, false);
+	}
+
 	for (i = 3; i < pts.v_pts.size(); i++)
 	{
 		vector<Facet>		cnflct_faces;
@@ -64,6 +68,13 @@ err_code draw_3dHull()
 		Pt					p = pts.v_pts[i];
 		
 		cout << "========== " << i << " ========= " << endl;
+		
+		{
+			StateObject		S;
+			S.store_faces(faces.v_faces, false);
+			states.add_state(S);
+		}
+
 		for (j = 0; j < faces.v_faces.size(); j++)
 				if (E_YES_CNFLCT == faces.v_faces[j].get_conflict_state(i))	
 					cnflct_faces.push_back(faces.v_faces[j]);
@@ -91,8 +102,16 @@ err_code draw_3dHull()
 			} while (!(o == *H.getorigin())); // Until the starting point
 		}
 
-		for (j = 0; j < cnflct_faces.size(); j++)
-			faces.removeFace(cnflct_faces[j]);
+		{
+			StateObject		S;
+			S.store_faces(cnflct_faces, true);
+
+			for (j = 0; j < cnflct_faces.size(); j++)
+				faces.removeFace(cnflct_faces[j]);
+			
+			S.store_faces(faces.v_faces, false);
+			states.add_state(S);
+		}
 
 		int hedge_pos = -1;
 		for (j = 0; j < horizon_edges.size(); j++)
@@ -125,11 +144,18 @@ err_code draw_3dHull()
 				cout << "Failure to create triangle fan: " << e << endl;
 				exit(0);
 			}
-
 		}
+
 		pt_excl.push_back(p);
 		err_status = cnflct_graph.update(pts.v_pts, faces.v_faces, 
 										 pt_excl);
 	}
+	{
+		StateObject		S;
+		S.store_faces(faces.v_faces, false);
+		states.add_state(S);
+	}
+
+	cout << endl << "States: " << states.v_stateObjects.size() << endl;
 	return E_SUCCESS;
 }

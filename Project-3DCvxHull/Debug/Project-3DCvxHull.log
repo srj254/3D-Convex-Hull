@@ -1,5 +1,5 @@
 ﻿  opengl_render_fxns.cpp
 f:\googledrive\purdue-university\purduesemestercourses\spring-2016\cs531-computationalgeometry-prof.hoffman\3d_cvx_hull\project-3dcvxhull\dependencies\glui\glui.h(868): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-f:\googledrive\purdue-university\purduesemestercourses\spring-2016\cs531-computationalgeometry-prof.hoffman\3d_cvx_hull\project-3dcvxhull\opengl_render_fxns.cpp(81): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+f:\googledrive\purdue-university\purduesemestercourses\spring-2016\cs531-computationalgeometry-prof.hoffman\3d_cvx_hull\project-3dcvxhull\opengl_render_fxns.cpp(86): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
   Project-3DCvxHull.vcxproj -> F:\GoogleDrive\Purdue-University\PurdueSemesterCourses\Spring-2016\CS531-ComputationalGeometry-Prof.Hoffman\3d_cvx_hull\Debug\Project-3DCvxHull.exe
   Project-3DCvxHull.vcxproj -> F:\GoogleDrive\Purdue-University\PurdueSemesterCourses\Spring-2016\CS531-ComputationalGeometry-Prof.Hoffman\3d_cvx_hull\Debug\Project-3DCvxHull.pdb (Partial PDB)

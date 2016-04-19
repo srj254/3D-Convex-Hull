@@ -46,7 +46,7 @@ allFaces		faces;			// Store all curent faces
 allHalfedges	halfedges;		// Store all possible Halfedges
 ConflictGraph	cnflct_graph;	// Conflict Graph of Faces Vs Pts
 vector<Pt>		pt_excl;
-StateObject		*state_objects; // Dynamically allocated storage for states
+allstates		states; 
 
 float			angle	= 0.00;
 float			zoom	= 0.00;
@@ -72,7 +72,6 @@ void init();
 /** Main function */
 int main(int argc, char **argv)
 {
-	state_objects = new StateObject[3*MAX_POINTS];
 	/* Initialize the GLUT window */
 	glutInit(&argc, argv);
 	glutInitWindowSize(windowWidth, windowHeight);

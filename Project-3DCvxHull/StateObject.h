@@ -8,19 +8,48 @@
 
 typedef struct polygon_t
 {
-	int		vertices[MAX_POINTS];
+	int		vertices[3];
 }polygon_t;
 
-typedef struct StateObject
+typedef struct edge_t
 {
-	vector<polygon_t>	polygons;
-	vector<polygon_t>	interior_polygon;
-	
-	vector<int>			highlight_pt;
+	int		vertices[2];
+};
+
+class StateObject
+{
+private: 
+	vector<polygon_t>	faces;
+	vector<polygon_t>	remove_faces;
+	vector<polygon_t>	color;
+	vector<edge_t>		edges;
+
+	int					highlight_pt;
 	vector<int>			interior_pts;
 	vector<int>			hull_pts;
 	vector<int>			exterior_pts;
 
-}StateObject;
+public:	
+	StateObject()
+	{
+		highlight_pt = -1;
+	}
+	bool store_faces(vector<Facet> &faces, bool delete_face);
+	bool set_highlight_pt(int v_index);
+	bool store_other_pts();
+};
 
-extern StateObject		*state_objects;
+class allstates
+{
+
+	public:
+	vector<StateObject>	v_stateObjects;
+
+	bool add_state(StateObject &S)
+	{
+		v_stateObjects.push_back(S);
+		return true;
+	}
+};
+
+extern allstates		states;
