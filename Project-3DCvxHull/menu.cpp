@@ -61,6 +61,7 @@ void clearall()
 	faces.clearall();
 	halfedges.clearall();
 	pt_excl.clear();
+	states.v_stateObjects.clear();
 }
 /** Function called when the an option of the menu is selected */
 void menu(int value)
@@ -173,6 +174,8 @@ void glui_generic_cb(int id)
 		case E_RADIOBUTTON:
 		{
 			cout << "Button Selected is " << select_mode << endl;
+			if (select_mode == 2)
+				state_index = states.v_stateObjects.size() -1 ;
 			break;
 		}
 		case E_READFILE_BOX:

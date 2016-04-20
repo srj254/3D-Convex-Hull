@@ -6,6 +6,7 @@
 #include "Facet.h"
 #include "Halfedge.h"
 #include "ConflictGraph.h"
+#include "StateObject.h"
 #include "menu.h"
 
 using namespace std;
@@ -81,8 +82,8 @@ void getPtsInArray()
 		px = pts.v_pts.at(i).X();
 		py = pts.v_pts.at(i).Y();
 		pz = pts.v_pts.at(i).Z();
-		pointArray[j] = px; j++;
-		pointArray[j] = py; j++;
+		pointArray[j] = px;  j++;
+		pointArray[j] = py;  j++;
 		pointArray[j] = pz; j++;
 		ptIndex[i] = i;
 		nPts++;
@@ -98,48 +99,76 @@ void getPtsInArray()
 	return;
 }
 
-void getFacesInArray()
+void init_norm_face_color()
 {
-	int		j = 0, k = 0;
-	
-	nFaces = 0;
-	nHEdges = 0;
-
-	for (unsigned i = 0; i < faces.v_faces.size(); i++)
+	for (unsigned i = 0; i < pts.v_pts.size(); i++)
 	{
-		Facet		*f = &(faces.v_faces.at(i));
-		Pt			o(*(f->getboundary().getorigin()));
-		Halfedge	H(f->getboundary());
-		unsigned	count = 0;
-		
-		do
+		ptColors[i * 4 + 0] = 0.5;
+		ptColors[i * 4 + 1] = 0.5;
+		ptColors[i * 4 + 2] = 0.0;
+		ptColors[i * 4 + 3] = 0.7;
+	}
+}
+
+void init_remv_face_color()
+{
+	for (unsigned i = 0; i < pts.v_pts.size(); i++)
+	{
+		ptColors[i * 4 + 0] = 0.2;
+		ptColors[i * 4 + 1] = 0.2;
+		ptColors[i * 4 + 2] = 0.2;
+		ptColors[i * 4 + 3] = 0.7;
+	}
+}
+
+void init_norm_line_color()
+{
+	for (unsigned i = 0; i < pts.v_pts.size(); i++)
+	{
+		ptColors[i * 4 + 0] = 0.0;
+		ptColors[i * 4 + 1] = 0.0;
+		ptColors[i * 4 + 2] = 0.0;
+		ptColors[i * 4 + 3] = 0.5;
+	}
+}
+
+void spl_point_colors(StateObject &S)
+{
+	for (unsigned i = 0; i < pts.v_pts.size(); i++)
+	{
+		if (i == S.highlight_pt)
 		{
-			hullEdges[j] = H.getorigin()->getID(); j++;
-			hullEdges[j] = H.getdest()->getID(); j++;
-			nHEdges++; count++;
-			hullFaces[k] = H.getorigin()->getID(); k++;
-			H = (*H.getnext());
-		} while (!(o == (*H.getorigin())));
-		
-		if (count > 3)
-		{
-			cout << "Face edges are more than 3";
-			getchar();
+			ptColors[i * 4 + 0] = 0.0;
+			ptColors[i * 4 + 1] = 0.0;
+			ptColors[i * 4 + 2] = 1.0; // Blue
+			ptColors[i * 4 + 3] = 0.5;
 		}
-		nFaces++;
+		else if (std::find( S.exterior_pts.begin(), 
+							S.exterior_pts.end(), i) != 
+							S.exterior_pts.end())
+		{
+			ptColors[i * 4 + 0] = 1.0; // Red
+			ptColors[i * 4 + 1] = 0.0;
+			ptColors[i * 4 + 2] = 0.0;
+			ptColors[i * 4 + 3] = 0.5;
+		}
+		else
+		{
+			ptColors[i * 4 + 0] = 0.0;
+			ptColors[i * 4 + 1] = 1.0; // Red
+			ptColors[i * 4 + 2] = 0.0;
+			ptColors[i * 4 + 3] = 0.5;
+		}
 	}
+}
 
-	if (false) //(1 == fchange)
+void init_point_colors()
+{
+	for (unsigned i = 0; i < pts.v_pts.size(); i++)
 	{
-		cout << "\nFaces: " << nFaces << endl;
-		for (int ii = 0; ii < nFaces * 3; ii += 3)
-			cout << hullFaces[ii] << "," << 
-					hullFaces[ii + 1] << "," << hullFaces[ii + 2] << endl;
-		cout << "Halfedges: " << nHEdges << endl;
-		for (int ii = 0; ii < nHEdges * 2; ii += 2)
-			cout << hullEdges[ii] << "," << hullEdges[ii + 1] << endl;
-
-		fchange = 0;
+		ptColors[i * 4 + 0] = 0.0;
+		ptColors[i * 4 + 1] = 0.0;
+		ptColors[i * 4 + 2] = 0.0;
+		ptColors[i * 4 + 3] = 0.5;
 	}
-	return;
 }

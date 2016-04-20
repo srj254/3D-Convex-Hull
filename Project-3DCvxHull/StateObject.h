@@ -8,17 +8,17 @@
 
 typedef struct polygon_t
 {
-	int		vertices[3];
+	unsigned int	vertices[3];
 }polygon_t;
 
 typedef struct edge_t
 {
-	int		vertices[2];
+	unsigned int	vertices[2];
 };
 
 class StateObject
 {
-private: 
+public:
 	vector<polygon_t>	faces;
 	vector<polygon_t>	remove_faces;
 	vector<polygon_t>	color;
@@ -26,17 +26,17 @@ private:
 
 	int					highlight_pt;
 	vector<int>			interior_pts;
-	vector<int>			hull_pts;
+	//vector<int>			hull_pts;
 	vector<int>			exterior_pts;
 
-public:	
+public:
 	StateObject()
 	{
 		highlight_pt = -1;
 	}
 	bool store_faces(vector<Facet> &faces, bool delete_face);
 	bool set_highlight_pt(int v_index);
-	bool store_other_pts();
+	bool set_exterior_pts();
 };
 
 class allstates

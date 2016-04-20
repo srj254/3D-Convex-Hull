@@ -1,4 +1,5 @@
 #pragma once
+#include "StateObject.h"
 
 typedef enum MENU_OPTIONS_T {
 	MENU_CLEAR,
@@ -20,4 +21,9 @@ bool file_picker(char *filename, int bufsize);
 err_code draw_3dHull();
 bool check_collinear(Pt &a, Pt &b, Pt &c);
 err_code crt_2face_triangle(Pt &a, Pt &b, Pt &c);
+void init_norm_face_color();
+void init_remv_face_color();
+void init_norm_line_color();
+void init_point_colors();
+void spl_point_colors(StateObject &S);
 

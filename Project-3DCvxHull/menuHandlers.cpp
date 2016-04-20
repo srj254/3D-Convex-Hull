@@ -58,6 +58,8 @@ err_code draw_3dHull()
 	{
 		StateObject		S;
 		S.store_faces(faces.v_faces, false);
+		S.set_exterior_pts();
+		states.add_state(S);
 	}
 
 	for (i = 3; i < pts.v_pts.size(); i++)
@@ -67,12 +69,14 @@ err_code draw_3dHull()
 		vector<int>			facet_edges;
 		Pt					p = pts.v_pts[i];
 		
-		cout << "========== " << i << " ========= " << endl;
+		cout << i << endl;
 		
 		{
 			StateObject		S;
 			S.store_faces(faces.v_faces, false);
+			S.set_highlight_pt(i);
 			states.add_state(S);
+			
 		}
 
 		for (j = 0; j < faces.v_faces.size(); j++)
@@ -110,7 +114,10 @@ err_code draw_3dHull()
 				faces.removeFace(cnflct_faces[j]);
 			
 			S.store_faces(faces.v_faces, false);
+			S.set_highlight_pt(i);
+			//cout << "Before: " << states.v_stateObjects.size() << endl;
 			states.add_state(S);
+			//cout << "After: " << states.v_stateObjects.size() << endl;
 		}
 
 		int hedge_pos = -1;
@@ -144,6 +151,13 @@ err_code draw_3dHull()
 				cout << "Failure to create triangle fan: " << e << endl;
 				exit(0);
 			}
+			{
+				StateObject		S;
+				S.store_faces(faces.v_faces, false);
+				S.set_exterior_pts();
+				states.add_state(S);
+			}
+
 		}
 
 		pt_excl.push_back(p);
@@ -153,9 +167,11 @@ err_code draw_3dHull()
 	{
 		StateObject		S;
 		S.store_faces(faces.v_faces, false);
+		S.set_exterior_pts();
 		states.add_state(S);
 	}
 
 	cout << endl << "States: " << states.v_stateObjects.size() << endl;
+	state_index = 0;
 	return E_SUCCESS;
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Facet.h"
+#include "ConflictGraph.h"
 #include "StateObject.h"
 
 bool StateObject::store_faces(vector<Facet>& in_faces, bool delete_face)
@@ -44,12 +45,22 @@ bool StateObject::store_faces(vector<Facet>& in_faces, bool delete_face)
 bool StateObject::set_highlight_pt(int v_index)
 {
 	this->highlight_pt = v_index;
+	this->set_exterior_pts();
 	return true;
 }
 
-bool StateObject::store_other_pts()
+bool StateObject::set_exterior_pts()
 {
-	// Call Conflict Graph APIS to extract all the 
-	// considered and non considered points
-	return false;
+	for (unsigned i = 0; i < pts.v_pts.size(); i++)
+	{
+		if (i != highlight_pt)
+		{
+			if (E_ABOVE == cnflct_graph.check_inout(i))
+				this->exterior_pts.push_back(i);
+			else
+				this->interior_pts.push_back(i);
+		}
+	}
+
+	return true;
 }

@@ -53,3 +53,13 @@ err_code ConflictGraph::update(vector<Pt>&	pt_vector,
 	return E_SUCCESS;
 }
 
+PT_ORIENT_T ConflictGraph::check_inout(unsigned index)
+{
+	for (unsigned i = 0; i < faces.v_faces.size(); i++)
+	{
+		if (faces.v_faces.at(i).pt_face_cnflct[index] != E_NO_CNFLCT)
+			return E_ABOVE;
+	}
+	return E_BELOW;
+}
+

@@ -1,7 +1,14 @@
+#include <iostream>
 #include "Dependencies\glew\glew.h"
 #include "Dependencies\freeglut\freeglut.h"
 #include "gen_codes.h"
-#include <iostream>
+#include "Point.h"
+#include "Facet.h"
+#include "Halfedge.h"
+#include "ConflictGraph.h"
+#include "StateObject.h"
+#include "menu.h"
+
 
 extern int fchange;
 extern int pchange;
@@ -10,7 +17,11 @@ void mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-
+		if (b_rotate)
+			b_rotate = !b_rotate;
+		else if (state_index != -1 && 
+				state_index < states.v_stateObjects.size()-1)
+			state_index++;
 	}
 	return;
 }

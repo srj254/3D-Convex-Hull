@@ -2,6 +2,7 @@
 #include <iterator>
 #include <vector>
 #include <set>
+#include <time.h>
 
 #include "Dependencies\glew\glew.h"
 #include "Dependencies\freeglut\freeglut.h"
@@ -52,12 +53,13 @@ float			angle	= 0.00;
 float			zoom	= 0.00;
 
 float			pointArray[MAX_POINTS * 3];
+float			ptColors[MAX_POINTS * 4];
+unsigned int	tri_vertices[3] = { 0 };
+unsigned int	edg_vertices[2] = { 0 };
+int				state_index = -1;
+
 GLubyte			ptIndex[MAX_POINTS];
 int				nPts = 0;
-GLubyte			hullFaces[3 * MAX_FACES];
-int				nFaces = 0;
-GLubyte			hullEdges[2 * MAX_HALFEDGES];
-int				nHEdges = 0;
 
 bool			b_rotate = false;
 bool			b_wireframe = false;
@@ -68,6 +70,7 @@ void changeSize(int w, int h);
 void display();
 void idle();
 void init();
+void timerfunc(int value);
 
 /** Main function */
 int main(int argc, char **argv)
@@ -91,6 +94,8 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouse);
 	glutMotionFunc(activeMotion);
 	glutPassiveMotionFunc(passiveMotion);
+	time_t	ltime; time(&ltime);
+	glutTimerFunc(2*1000, timerfunc, ltime%10000);
 
 	/* Generate the menu */
 	makeMenu();

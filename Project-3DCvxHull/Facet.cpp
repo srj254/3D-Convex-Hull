@@ -23,12 +23,6 @@ Facet::Facet(vector<int> hf_edge_vctr, int n, int id)
 
 	for (i = 0; i < hf_edge_vctr.size(); i++)
 	{
-		//cout << "Origin ";  o.print_point(); cout << endl;
-		//cout << "HalfEdge Dest ";  \
-		(halfedges.v_halfedges.at(hf_edge_vctr.at(i))).\
-			getdest()->print_point(); 
-		//cout << endl;
-
 		if (o == *(halfedges.v_halfedges.at(hf_edge_vctr.at(i))).getdest())
 		{
 			//cout << "Equal points" << endl;
@@ -56,9 +50,6 @@ Facet::Facet(vector<int> hf_edge_vctr, int n, int id)
 			(halfedges.v_halfedges.at(local_index)).
 				setprev(halfedges.v_halfedges.at(prev_local_index));
 			(halfedges.v_halfedges.at(local_index)).setface(*this);
-			//cout << i << " "; 
-			//(halfedges.v_halfedges.at(local_index)).print_halfedge(); 
-			//cout << endl;
 		}
 
 	}

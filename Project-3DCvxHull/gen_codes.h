@@ -5,7 +5,7 @@
 #include "Dependencies\freeglut\freeglut.h"
 #include "Dependencies\glui\glui.h"
 
-#define	 DEBUG	1
+#define	 DEBUG	0
 
 typedef enum menu_IDList_T
 {
@@ -66,15 +66,20 @@ extern float			angle;
 extern float			zoom;
 extern bool				b_rotate;
 extern bool				b_wireframe;
-extern HANDLE			ghSemaphore;
 
 extern float			pointArray[];
+extern float			ptColors[];
+extern unsigned int		tri_vertices[];
+extern unsigned int		edg_vertices[];
+extern int				state_index;
+
+
 extern GLubyte			ptIndex[];
 extern int				nPts;
-extern GLubyte			hullFaces[];
-extern int				nFaces;
-extern GLubyte			hullEdges[];
-extern int				nHEdges;
+//extern GLubyte			hullFaces[];
+//extern int				nFaces;
+//extern GLubyte			hullEdges[];
+//extern int				nHEdges;
 
 extern GLUI				*glui;
 
