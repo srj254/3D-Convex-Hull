@@ -102,7 +102,8 @@ void getPtsInArray()
 
 float normal_face_color[4] = {0.6, 0.6, 0.6, 0.7};
 float remv_face_color[4] = { 0.3, 0.3, 0.3, 0.7 };
-float norm_line_color[4] = { 0.0, 0.0, 0.0, 0.7 }; 
+float norm_line_color[4] = { 0.0, 0.0, 0.0, 0.3 }; 
+float horizon_line_color[4] = { 1.0, 1.0, 0.0, 1.0 };
 float init_pt_color[4] = { 0.0, 0.0, 0.0, 0.7 };
 float spl_pt_color[4] = { 0, 0, 1.0, 0.7 };
 float ext_pt_color[4] = { 1, 0, 0.0, 0.7 };
@@ -142,6 +143,18 @@ void init_norm_line_color()
 		ptColors[i * 4 + 3] = norm_line_color[3];
 	}
 }
+
+void init_horizon_line_color()
+{
+	for (unsigned i = 0; i < pts.v_pts.size(); i++)
+	{
+		ptColors[i * 4 + 0] = horizon_line_color[0];
+		ptColors[i * 4 + 1] = horizon_line_color[1];
+		ptColors[i * 4 + 2] = horizon_line_color[2];
+		ptColors[i * 4 + 3] = horizon_line_color[3];
+	}
+}
+
 
 void spl_point_colors(StateObject &S)
 {

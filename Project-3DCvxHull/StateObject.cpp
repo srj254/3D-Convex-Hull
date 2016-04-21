@@ -66,3 +66,16 @@ bool StateObject::set_exterior_pts()
 
 	return true;
 }
+
+bool StateObject::store_horizon(vector<Halfedge>	&horizon_edges)
+{
+	edge_t			e = { 0 };
+	for (unsigned i = 0; i < horizon_edges.size(); i++)
+	{
+		e.vertices[0] = horizon_edges.at(i).getorigin()->getID();
+		e.vertices[1] = horizon_edges.at(i).getdest()->getID();
+		this->horizon_edges.push_back(e);
+	}
+	cout << "Horizon Edges size:" << horizon_edges.size()<< endl;
+	return true;
+}

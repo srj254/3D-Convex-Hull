@@ -114,6 +114,7 @@ err_code draw_3dHull()
 			
 			S.store_faces(faces.v_faces, false);
 			S.set_highlight_pt(i);
+			S.store_horizon(horizon_edges);
 			//cout << "Before: " << states.v_stateObjects.size() << endl;
 			states.add_state(S);
 			//cout << "After: " << states.v_stateObjects.size() << endl;
@@ -154,6 +155,7 @@ err_code draw_3dHull()
 				StateObject		S;
 				S.store_faces(faces.v_faces, false);
 				S.set_highlight_pt(i);
+				S.store_horizon(horizon_edges);
 				states.add_state(S);
 			}
 
@@ -162,6 +164,7 @@ err_code draw_3dHull()
 		pt_excl.push_back(p);
 		err_status = cnflct_graph.update(pts.v_pts, faces.v_faces, 
 										 pt_excl);
+		horizon_edges.clear();
 	}
 	{
 		StateObject		S;

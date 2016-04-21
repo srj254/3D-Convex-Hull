@@ -91,6 +91,7 @@ extern char			object_names[][64];
 extern float		normal_face_color[];
 extern float		remv_face_color[];
 extern float		norm_line_color[];
+extern float		horizon_line_color[];
 extern float		init_pt_color[];
 extern float		spl_pt_color[];
 extern float		ext_pt_color[];

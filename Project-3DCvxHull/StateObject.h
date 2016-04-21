@@ -23,6 +23,7 @@ public:
 	vector<polygon_t>	remove_faces;
 	vector<polygon_t>	color;
 	vector<edge_t>		edges;
+	vector<edge_t>		horizon_edges;
 
 	int					highlight_pt;
 	vector<int>			interior_pts;
@@ -37,6 +38,7 @@ public:
 	bool store_faces(vector<Facet> &faces, bool delete_face);
 	bool set_highlight_pt(int v_index);
 	bool set_exterior_pts();
+	bool store_horizon(vector<Halfedge>	&horizon_edges);
 };
 
 class allstates

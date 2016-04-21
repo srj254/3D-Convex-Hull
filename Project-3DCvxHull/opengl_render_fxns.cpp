@@ -47,16 +47,27 @@ void display()
 
 	if (b_rotate)
 	{
-		glRotatef(angle, X->get_int_val(), 
-						 Y->get_int_val(), 
-						 Z->get_int_val());
+		int xx = X->get_int_val();
+		int yy = Y->get_int_val();
+		int zz = Z->get_int_val();
+		if (0 == xx && 0 == yy && 0 == zz)
+			zz = 1.0;
+		glRotatef(angle, xx, 
+						 yy, 
+						 zz);
 		angle += (float)0.05;
 	}
 	else
-		glRotatef(angle, X->get_int_val(),
-					Y->get_int_val(),
-					Z->get_int_val());
-
+	{
+		int xx = X->get_int_val();
+		int yy = Y->get_int_val();
+		int zz = Z->get_int_val();
+		if (0 == xx && 0 == yy && 0 == zz)
+			zz = 1.0;
+		glRotatef(angle, xx,
+			yy,
+			zz);
+	}
 	//state_index = states.v_stateObjects.size()-5;
 	if (state_index > -1)
 	{
@@ -103,31 +114,32 @@ void display()
 			memset(ptColors, 0x00, 4 * sizeof(float));
 		}
 
-		//int ii, jj = 0;
-		//float delta = 0.0005;
+		getPtsInArray(); // Load the points into an array
+		for (unsigned i = 0; i < S.horizon_edges.size(); i++)
+		{
+			edg_vertices[0] = S.horizon_edges.at(i).vertices[0];
+			edg_vertices[1] = S.horizon_edges.at(i).vertices[1];
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_COLOR_ARRAY);
+			init_horizon_line_color();
+
+			glVertexPointer(3, GL_FLOAT, 0, pointArray);
+			glColorPointer(4, GL_FLOAT, 0, ptColors);
+			glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, edg_vertices);
+			glDisableClientState(GL_COLOR_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+
+			memset(edg_vertices, 0x00, 2 * sizeof(int));
+			memset(ptColors, 0x00, 4 * sizeof(float));
+		}
+
 		getPtsInArray(); // Load the points into an array
 		for (unsigned i = 0; i < S.edges.size(); i++)
 		{
 			edg_vertices[0] = S.edges.at(i).vertices[0];
 			edg_vertices[1] = S.edges.at(i).vertices[1];
-			//ii = edg_vertices[0];
-			//jj = edg_vertices[1];
-			//glBegin(GL_TRIANGLE_STRIP);
-			//glColor3f(0.0f, 0.0f, 0.0f);
-			//glVertex3f(pts.v_pts[ii].X(),
-			//	pts.v_pts[ii].Y()-delta,
-			//	pts.v_pts[ii].Z()); 
-			//glVertex3f(pts.v_pts[jj].X(),
-			//	pts.v_pts[jj].Y()-delta,
-			//	pts.v_pts[jj].Z()); 
-			//glVertex3f(pts.v_pts[jj].X(),
-			//	pts.v_pts[jj].Y() + delta,
-			//	pts.v_pts[jj].Z());
-			//glVertex3f(pts.v_pts[ii].X(),
-			//	pts.v_pts[ii].Y()+delta,
-			//	pts.v_pts[ii].Z()); 
-			//glEnd();
-
+	
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_COLOR_ARRAY);
 			init_norm_line_color();
