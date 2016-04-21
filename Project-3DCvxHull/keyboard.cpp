@@ -15,7 +15,7 @@
 void keyboard(unsigned char k, int x, int y)
 {
 	/* Show which key was pressed */
-	if (k == 'n' && state_index < states.v_stateObjects.size() - 1 &&
+	if (k == 'n' && state_index < (int)states.v_stateObjects.size() - 1 &&
 		state_index != -1)
 	{
 		state_index++;

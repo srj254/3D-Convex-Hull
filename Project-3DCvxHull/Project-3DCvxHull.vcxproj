@@ -131,6 +131,7 @@
     <ClCompile Include="mouse.cpp" />
     <ClCompile Include="opengl_render_fxns.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="RegularObjects.cpp" />
     <ClCompile Include="StateObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

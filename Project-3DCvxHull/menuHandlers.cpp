@@ -76,7 +76,6 @@ err_code draw_3dHull()
 			S.store_faces(faces.v_faces, false);
 			S.set_highlight_pt(i);
 			states.add_state(S);
-			
 		}
 
 		for (j = 0; j < faces.v_faces.size(); j++)
@@ -154,7 +153,7 @@ err_code draw_3dHull()
 			{
 				StateObject		S;
 				S.store_faces(faces.v_faces, false);
-				S.set_exterior_pts();
+				S.set_highlight_pt(i);
 				states.add_state(S);
 			}
 
@@ -172,6 +171,9 @@ err_code draw_3dHull()
 	}
 
 	cout << endl << "States: " << states.v_stateObjects.size() << endl;
-	state_index = 0;
+	if (2 == select_mode)
+		state_index = states.v_stateObjects.size() - 1;
+	else
+		state_index = 0;
 	return E_SUCCESS;
 }

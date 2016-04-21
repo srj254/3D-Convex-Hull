@@ -52,8 +52,6 @@ class Pt
 
 typedef enum point_type
 {
-	E_CIRCLE,
-	E_3D_STAR,
 	E_RANDOM
 }point_type;
 

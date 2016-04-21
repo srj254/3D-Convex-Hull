@@ -47,11 +47,15 @@ void display()
 
 	if (b_rotate)
 	{
-		glRotatef(angle, 1.0, 0.5, 0.0);
+		glRotatef(angle, X->get_int_val(), 
+						 Y->get_int_val(), 
+						 Z->get_int_val());
 		angle += (float)0.05;
 	}
 	else
-		glRotatef(angle, 1.0, 0.5, 0.0);
+		glRotatef(angle, X->get_int_val(),
+					Y->get_int_val(),
+					Z->get_int_val());
 
 	//state_index = states.v_stateObjects.size()-5;
 	if (state_index > -1)
@@ -99,13 +103,31 @@ void display()
 			memset(ptColors, 0x00, 4 * sizeof(float));
 		}
 
-
+		//int ii, jj = 0;
+		//float delta = 0.0005;
 		getPtsInArray(); // Load the points into an array
 		for (unsigned i = 0; i < S.edges.size(); i++)
 		{
 			edg_vertices[0] = S.edges.at(i).vertices[0];
 			edg_vertices[1] = S.edges.at(i).vertices[1];
-			
+			//ii = edg_vertices[0];
+			//jj = edg_vertices[1];
+			//glBegin(GL_TRIANGLE_STRIP);
+			//glColor3f(0.0f, 0.0f, 0.0f);
+			//glVertex3f(pts.v_pts[ii].X(),
+			//	pts.v_pts[ii].Y()-delta,
+			//	pts.v_pts[ii].Z()); 
+			//glVertex3f(pts.v_pts[jj].X(),
+			//	pts.v_pts[jj].Y()-delta,
+			//	pts.v_pts[jj].Z()); 
+			//glVertex3f(pts.v_pts[jj].X(),
+			//	pts.v_pts[jj].Y() + delta,
+			//	pts.v_pts[jj].Z());
+			//glVertex3f(pts.v_pts[ii].X(),
+			//	pts.v_pts[ii].Y()+delta,
+			//	pts.v_pts[ii].Z()); 
+			//glEnd();
+
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_COLOR_ARRAY);
 			init_norm_line_color();
@@ -197,24 +219,25 @@ void timerfunc(int value)
 	time(&ltime);
 	//cout << "Timer Callback: " << (ltime%10000)-value << endl;
 	
-	if (select_mode == 1)
+	if (select_mode == 1) // Movie
 	{
-		if(	-1 != state_index && 
-			state_index < states.v_stateObjects.size() - 1)
-			state_index++;
-		glutTimerFunc(interval*1000, timerfunc, ltime % 200000);
-	}
-	else if (select_mode == 2)
-	{
-		state_index = states.v_stateObjects.size() - 1;
-	}
-	else
-	{
-		if (state_index == value &&
-			state_index < states.v_stateObjects.size() - 1 &&
-			state_index != -1)
+		if (-1 != state_index && !b_pause &&
+			state_index < (int)states.v_stateObjects.size() - 1)
 		{
-			cout << "Update due to Timeout";
+			state_index++;
+		}
+		glutTimerFunc(interval*1000, timerfunc, state_index);
+	}
+	else if (select_mode == 2) // Batch
+	{
+		state_index = (int)states.v_stateObjects.size() - 1;
+		glutTimerFunc(interval * 1000, timerfunc, state_index);
+	}
+	else // Step mode
+	{
+		if (state_index == value && state_index != -1 && !b_pause &&
+			(state_index < ((int)states.v_stateObjects.size()) - 1))
+		{
 			state_index++;
 		}
 		glutTimerFunc(30*1000, timerfunc, state_index);

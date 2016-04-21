@@ -40,7 +40,7 @@ err_code ConflictGraph::update(vector<Pt>&	pt_vector,
 					}
 					catch (exception &e)
 					{
-						cout << "Error Here";
+						cout << "Error Here" << e.what() << endl;
 					}
 				}
 			}

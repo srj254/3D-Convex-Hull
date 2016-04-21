@@ -55,10 +55,12 @@ bool StateObject::set_exterior_pts()
 	{
 		if (i != highlight_pt)
 		{
-			if (E_ABOVE == cnflct_graph.check_inout(i))
-				this->exterior_pts.push_back(i);
-			else
+			if (std::find(pt_excl.begin(), pt_excl.end(), pts.v_pts.at(i))
+				!= pt_excl.end())
 				this->interior_pts.push_back(i);
+			else
+				this->exterior_pts.push_back(i);
+				
 		}
 	}
 

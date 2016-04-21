@@ -66,6 +66,11 @@ err_code Points::loadpoints(FILE * fp)
 	float	px, py, pz;
 		
 	fscanf_s(fp, "%d\n", &input_pts);
+	if (input_pts > 40)
+	{
+		cout << "Number of points should be within 40";
+		return E_FAILURE;
+	}
 	while ((!feof(fp)) && (input_pts > 0))
 	{
 		fscanf_s(fp, "%f %f %f\n", &px, &py, &pz);
@@ -94,41 +99,8 @@ void Points::generate_points(int lb, int ub, point_type typ, int nPts)
 {
 	switch (typ)
 	{
-		case E_CIRCLE:
-		{
-			break;
-		}
-		case E_3D_STAR:
 		case E_RANDOM:
 		{
-			int i = 0; 
-			srand(100000000);
-			for (i = 0; i < rand_points; i++)
-			{
-				double radius = 0.00;
-				double theta = 0.00;
-				double psi = 0.00;
-				
-				theta = ((rand()*rand()) % 35999) / 100.00;
-				psi = ((rand()*rand()) % 17999) / 100.00;
-				cout << theta << ", " << psi << endl;
-
-				theta = (theta * (3.1415926)) / 180.00;
-				psi = (psi * (3.1415926)) / 180.00;
-				radius = ((rand() % 13) / 13.00) * 
-						 ((theta - psi) / (fabs(theta - psi)));
-				radius = ((theta - psi) / (fabs(theta - psi)));
-				cout << "Radius: " << radius << ", Theta: " << 
-						theta << ", Psi: " << psi << endl;
-				
-				Pt		P(	(float)radius*cos(theta)*sin(psi),
-							(float)radius*sin(psi)*sin(theta),
-							(float)radius*cos(psi));
-
-				P.print_point_verbose();
-				//getchar();
-				this->v_pts.push_back(P);
-			}
 			break;
 		}
 	}

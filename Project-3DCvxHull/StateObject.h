@@ -14,7 +14,7 @@ typedef struct polygon_t
 typedef struct edge_t
 {
 	unsigned int	vertices[2];
-};
+}edge_t;
 
 class StateObject
 {

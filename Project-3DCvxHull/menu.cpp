@@ -17,44 +17,6 @@
 
 using namespace std;
 
-#if 0
-void fileSubmenu(int value)
-{
-	err_code status;
-
-	switch (value)
-	{
-		case MENU_FREAD:
-		{
-			FILE	*fp = NULL;
-
-			cout << read_filename << endl;
-			fopen_s(&fp, read_filename, "r");
-			if (NULL == fp)
-			{
-				cout << "File Open failed\n"<< errno;
-				return;
-			}
-			status = pts.loadpoints(fp);
-			if (E_SUCCESS != status)
-			{
-				cout << "Load points failed\n";
-				exit(0);
-			}
-					
-			fclose(fp);
-			break;
-		}
-		case MENU_FWRITE:
-		{
-			break;
-		}
-		default:
-			break;
-	}
-}
-#endif
-
 void clearall()
 {
 	pts.clearpoints();
@@ -62,6 +24,7 @@ void clearall()
 	halfedges.clearall();
 	pt_excl.clear();
 	states.v_stateObjects.clear();
+	state_index = -1;
 }
 /** Function called when the an option of the menu is selected */
 void menu(int value)
@@ -85,7 +48,7 @@ void menu(int value)
 		}
 		case MENU_TAKE_SNAP:
 		{
-			// take snapshot of the glut window
+			// Not used
 			break;
 		}
 		case MENU_ROTATE:
@@ -159,7 +122,7 @@ void glui_generic_cb(int id)
 			file_picker(buffer, 1024);
 			strncpy_s(read_filename, buffer, sizeof(read_filename));
 			glui->sync_live();
-			cout << read_filename;
+			//cout << read_filename;
 			break;
 		}
 		case E_WRITE_BROWSE:
@@ -168,7 +131,7 @@ void glui_generic_cb(int id)
 			file_picker(buffer, 1024);
 			strncpy_s(write_filename, buffer, sizeof(write_filename));
 			glui->sync_live();
-			cout << write_filename;
+			//cout << write_filename;
 			break;
 		}
 		case E_RADIOBUTTON:
@@ -180,39 +143,44 @@ void glui_generic_cb(int id)
 		}
 		case E_READFILE_BOX:
 		{
-			cout << "Read location is " << read_filename << endl;
+			//Manual entry into box 
 			break;
 		}
 		case E_WRITEFILE_BOX:
 		{
-			cout << "Write location is " << write_filename << endl;
+			//cout << "Write location is " << write_filename << endl;
 			break;
 		}
 		case E_SNAPSHOT_NAME_BOX:
 		{
-			cout << "Snapshot name is " << snapshot_name_prefix << endl;
+			// Not Used
 			break;
 		}
 		case E_INTRVL_SPINNER:
 		{
-			cout << "Value is: " << interval << endl;
+			//cout << "Value is: " << interval << endl;
 			break;
 		}
 		case E_ZOOM_IN:
 		{
-			if (zoom < 11)
-				zoom += 0.3;
+			if (zoom < 50)
+				zoom += (float)0.3;
 			break;
 		}
 		case E_ZOOM_OUT:
 		{
-			if (zoom > -11)
-				zoom -= 0.3;
+			if (zoom > -50)
+				zoom -= (float)0.3;
 			break;
 		}
 		case E_WIRE_FRAME:
 		{
 			b_wireframe = !b_wireframe;
+			break;
+		}
+		case E_PAUSE:
+		{
+			b_pause = !b_pause;
 			break;
 		}
 		case E_READ_BUTTON:
@@ -244,12 +212,88 @@ void glui_generic_cb(int id)
 			clearall();
 			break;
 		}
-		case E_RAND_POINTS:
+		case E_RFACE_CLR_LISTBOX:
 		{
-			clearall();
-			pts.generate_points(-1, 1, E_RANDOM, rand_points);
+			int i = rface_pt_clrlist->get_int_val();
+			remv_face_color[0] = color_values[i][0];
+			remv_face_color[1] = color_values[i][1];
+			remv_face_color[2] = color_values[i][2];
+			remv_face_color[4] = 0.7;
+
 			break;
 		}
+		case E_FACE_CLR_LISTBOX:
+		{
+			int i = face_pt_clrlist->get_int_val();
+			normal_face_color[0] = color_values[i][0];
+			normal_face_color[1] = color_values[i][1];
+			normal_face_color[2] = color_values[i][2];
+			normal_face_color[4] = 0.7;
+
+			break;
+		}
+		case E_HLPT_CLR_LISTBOX:
+		{
+			int i = hlt_pt_clrlist->get_int_val();
+			spl_pt_color[0] = color_values[i][0];
+			spl_pt_color[1] = color_values[i][1];
+			spl_pt_color[2] = color_values[i][2];
+			spl_pt_color[4] = 0.7;
+
+			break;
+		}case E_INTPT_CLR_LISTBOX:
+		{
+			int i = int_pt_clrlist->get_int_val();
+			int_pt_color[0] = color_values[i][0];
+			int_pt_color[1] = color_values[i][1];
+			int_pt_color[2] = color_values[i][2];
+			int_pt_color[4] = 0.7;
+
+			break;
+		}case E_EXTPT_CLR_LISTBOX:
+		{
+			int i = ext_pt_clrlist->get_int_val();
+			ext_pt_color[0] = color_values[i][0];
+			ext_pt_color[1] = color_values[i][1];
+			ext_pt_color[2] = color_values[i][2];
+			ext_pt_color[4] = 0.7;
+
+			break;
+		}
+		case E_LINEPT_CLR_LISTBOX:
+		{
+			int i = line_pt_clrlist->get_int_val();
+			norm_line_color[0] = color_values[i][0];
+			norm_line_color[1] = color_values[i][1];
+			norm_line_color[2] = color_values[i][2];
+			norm_line_color[4] = 0.7;
+			break;
+		}
+		case E_GEN_RAND_PTS:
+		{
+			clearall();
+			int objType = objectList->get_int_val();
+			switch (objType)
+			{
+			case 0:
+				hollow_sphere[0][2]; break;
+			case 1: 
+				solid_sphere[0][2]; break;
+			case 2:
+				hollow_cube[0][2]; break;
+			case 3:
+				solid_cube[0][2]; break;
+			case 4:
+				hollow_tetrahedron[0][2]; break;
+			case 5:
+				solid_tetrahedron[0][2]; break;
+			default:
+				break;
+			}
+
+			break;
+		}
+		break;
 		default:
 		{
 			break;
@@ -260,16 +304,11 @@ void glui_generic_cb(int id)
 /** Generates the menu */
 void makeMenu()
 {
-	/* Generate the color submenu */
-	//fileSubmenuID = glutCreateMenu(fileSubmenu);
-	//glutAddMenuEntry("Load Points", MENU_FREAD);
-	//glutAddMenuEntry("Write Convex Hull", MENU_FWRITE);
-
 	/* Generate the menu */
 	menuID = glutCreateMenu(menu);
 	glutAddMenuEntry("3D Hull", MENU_HULL);
 	glutAddMenuEntry("Rotate", MENU_ROTATE);
-	glutAddMenuEntry("Take Snap", MENU_TAKE_SNAP);
+	//glutAddMenuEntry("Take Snap", MENU_TAKE_SNAP);
 	glutAddMenuEntry("Clear", MENU_CLEAR);
 
 	/* Attach menu to the right click */
