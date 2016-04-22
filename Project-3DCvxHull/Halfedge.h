@@ -78,10 +78,12 @@ class Halfedge {
 		}
 		void print_halfedge()
 		{
+#if DEBUG
 			cout << "Halfedge: ";
 			origin->print_point();
 			cout << " ->"; 
 			dest->print_point();
+#endif
 		}
 
 };

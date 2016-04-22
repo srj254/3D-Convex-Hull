@@ -168,25 +168,25 @@ int main(int argc, char **argv)
 
 	GLUI_Panel *fileOpsPanel = glui->add_panel("File Operations");
 	GLUI_EditText *read_file = glui->add_edittext_to_panel(fileOpsPanel, 
-					"Read Location", GLUI_EDITTEXT_TEXT, read_filename,
+					"Read File", GLUI_EDITTEXT_TEXT, read_filename,
 					E_READFILE_BOX, glui_generic_cb);
 	read_file->set_w(200);
-	//GLUI_EditText *write_file = glui->add_edittext_to_panel(fileOpsPanel, 
-	//				"Write Location", GLUI_EDITTEXT_TEXT, write_filename, 
-	//				E_WRITEFILE_BOX, glui_generic_cb);
-	//write_file->set_w(200);
+	GLUI_EditText *write_file = glui->add_edittext_to_panel(fileOpsPanel, 
+					"Write File", GLUI_EDITTEXT_TEXT, write_filename, 
+					E_WRITEFILE_BOX, glui_generic_cb);
+	write_file->set_w(200);
 	glui->add_column_to_panel(fileOpsPanel, false);
 
 	(glui->add_button_to_panel(fileOpsPanel, "Browse", E_READ_BROWSE, 
-					glui_generic_cb))->set_w(30);
+					glui_generic_cb))->set_w(75);
 
-	//glui->add_button_to_panel(fileOpsPanel, "Browse", E_WRITE_BROWSE, 
-	//				glui_generic_cb)->set_w(30);
+	glui->add_button_to_panel(fileOpsPanel, "Write Result", E_WRITE_BROWSE, 
+					glui_generic_cb)->set_w(75);
 	glui->add_column_to_panel(fileOpsPanel, false);
 	glui->add_button_to_panel(fileOpsPanel, "Read", E_READ_BUTTON,
 					glui_generic_cb)->set_w(30);
 
-	if (false)
+#if 0
 	{
 		GLUI_Panel *clr_panel = glui->add_panel("Choose colors");
 		hlt_pt_clrlist = glui->add_listbox_to_panel(clr_panel,
@@ -227,14 +227,50 @@ int main(int argc, char **argv)
 			line_pt_clrlist->add_item(ii, color_names[ii]);
 
 	}
+#endif
+
+	{
+		GLUI_Panel *clr_panel = glui->add_panel("Choose colors");
+
+		GLUI_Button *hlt_clr_button = glui->add_button_to_panel(clr_panel,
+			"Random Point", E_HLPT_CLR_BUTTON, glui_generic_cb);
+		hlt_clr_button->set_w(100);
+		GLUI_Button *hull_clr_button = glui->add_button_to_panel(clr_panel,
+			"Evaluated Point", E_HULLPT_CLR_BUTTON, glui_generic_cb);
+		hull_clr_button->set_w(100);
+
+		glui->add_column_to_panel(clr_panel, false);
+		GLUI_Button *Int_clr_button = glui->add_button_to_panel(clr_panel,
+			"Interior Point", E_INTPT_CLR_BUTTON, glui_generic_cb);
+		Int_clr_button->set_w(100);
+
+		GLUI_Button *Ext_clr_button = glui->add_button_to_panel(clr_panel,
+			"Exterior Point", E_EXTPT_CLR_BUTTON, glui_generic_cb);
+		Ext_clr_button->set_w(100);
+
+		glui->add_column_to_panel(clr_panel, false);
+		GLUI_Button *norm_face_clr_button = glui->add_button_to_panel(clr_panel,
+			"Normal Face", E_FACE_CLR_BUTTON, glui_generic_cb);
+		norm_face_clr_button->set_w(100);
+
+		GLUI_Button *del_face_clr_button = glui->add_button_to_panel(clr_panel,
+			"Deleted Face", E_RFACE_CLR_BUTTON, glui_generic_cb);
+		del_face_clr_button->set_w(100);
+
+		GLUI_Button *add_face_clr_button = glui->add_button_to_panel(clr_panel,
+			"Added Face", E_NEWFACE_CLR_BUTTON, glui_generic_cb);
+		add_face_clr_button->set_w(100);
+	}
 
 	{
 
 		GLUI_Panel *obj_panel = glui->add_panel("3D Objects");
-		GLUI_RadioGroup *objlist = glui->add_radiogroup_to_panel(obj_panel, 
-							&select_object, E_OBJECT_LISTBOX, glui_generic_cb);
+		GLUI_RadioGroup *objlist = glui->add_radiogroup_to_panel(obj_panel,
+			&select_object, E_OBJECT_LISTBOX, glui_generic_cb);
 		for (unsigned ii = 0; ii < 6; ii++)
-			glui->add_radiobutton_to_group(objlist, object_names[ii]);
+		{
+			glui->add_radiobutton_to_group(objlist, object_names[ii]); 
+		}
 		
 		glui->add_button_to_panel(obj_panel, "Generate points", E_GEN_RAND_PTS,
 			glui_generic_cb);

@@ -6,6 +6,7 @@
 
 #include "gen_codes.h"
 #include "Point.h"
+#include "menu.h"
 
 using namespace std;
 
@@ -86,6 +87,11 @@ err_code Points::loadpoints(FILE * fp)
 	{
 		cout << v_pts[i].getID() << " ";  v_pts[i].print_point_verbose();
 		cout << endl;
+	}
+	if (!init_pointswaps())
+	{
+		getchar();
+		exit(0);
 	}
 	return E_SUCCESS;
 }

@@ -28,6 +28,10 @@ class Pt
 		{
 			return ID;
 		}
+		inline void setID(int newID)
+		{
+			ID = newID;
+		}
 
 		float X();
 		float Y();

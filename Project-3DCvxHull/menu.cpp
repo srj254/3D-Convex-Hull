@@ -127,11 +127,42 @@ void glui_generic_cb(int id)
 		}
 		case E_WRITE_BROWSE:
 		{
-			char buffer[1024] = { 0 };
-			file_picker(buffer, 1024);
-			strncpy_s(write_filename, buffer, sizeof(write_filename));
-			glui->sync_live();
-			//cout << write_filename;
+			char	filename[255] = "3d-cvx-hull-result.txt";
+			FILE	*fp = NULL;
+
+			if (0 == strlen(write_filename))
+				fopen_s(&fp, filename, "w");
+			else
+				fopen_s(&fp, write_filename, "w");
+
+			if (NULL == fp)
+			{
+				printf("File Open failed\n");
+				return;
+			}
+			StateObject& last_state = states.v_stateObjects.at(
+								states.v_stateObjects.size() - 1);
+			int		pt_ind = 0;
+			fprintf(fp, "%s\n", "HULL POINTS");
+			for (int i = 0; i < last_state.hull_pts.size(); i++)
+			{
+				pt_ind = last_state.hull_pts.at(i);
+				fprintf(fp, "%f %f %f\n", pts.v_pts.at(pt_ind).X(),
+										pts.v_pts.at(pt_ind).Y(), 
+										pts.v_pts.at(pt_ind).Z());
+			}
+
+			fprintf(fp, "%s\n", "INTERIOR POINTS");
+			for (int i = 0; i < last_state.interior_pts.size(); i++)
+			{
+				pt_ind = last_state.interior_pts.at(i);
+				fprintf(fp, "%f %f %f\n", pts.v_pts.at(pt_ind).X(),
+					pts.v_pts.at(pt_ind).Y(),
+					pts.v_pts.at(pt_ind).Z());
+			}
+
+			fclose(fp);
+
 			break;
 		}
 		case E_RADIOBUTTON:
@@ -212,6 +243,7 @@ void glui_generic_cb(int id)
 			clearall();
 			break;
 		}
+#if 0
 		case E_RFACE_CLR_LISTBOX:
 		{
 			int i = rface_pt_clrlist->get_int_val();
@@ -269,6 +301,7 @@ void glui_generic_cb(int id)
 			norm_line_color[4] = 0.7;
 			break;
 		}
+#endif
 		case E_GEN_RAND_PTS:
 		{
 			cout << "Generate Random Points" << endl;
@@ -315,10 +348,98 @@ void glui_generic_cb(int id)
 				default:
 					break;
 			}
+			if (select_object < 6)
+			{
+				if (!init_pointswaps())
+				{
+					getchar();
+					exit(0);
+				}
+			}
+			break;
+		}
+
+
+		case E_NEWFACE_CLR_BUTTON:
+		{
+			if (doPickColorDialog(&added_face))
+			{
+				new_face_color[0] = GetRValue(added_face)/255.0f;
+				new_face_color[1] = GetGValue(added_face)/255.0f;
+				new_face_color[2] = GetBValue(added_face)/255.0f;
+			}
 
 			break;
 		}
-		break;
+
+		case E_FACE_CLR_BUTTON:
+		{
+			if (doPickColorDialog(&normal_face))
+			{
+				normal_face_color[0] = GetRValue(normal_face) / 255.0f;
+				normal_face_color[1] = GetGValue(normal_face) / 255.0f;
+				normal_face_color[2] = GetBValue(normal_face) / 255.0f;
+			}
+
+			break;
+		}
+
+		case E_RFACE_CLR_BUTTON:
+		{
+			if (doPickColorDialog(&deleted_face))
+			{
+				remv_face_color[0] = GetRValue(deleted_face) / 255.0f;
+				remv_face_color[1] = GetGValue(deleted_face) / 255.0f;
+				remv_face_color[2] = GetBValue(deleted_face) / 255.0f;
+			}
+
+			break;
+		}
+		case E_HLPT_CLR_BUTTON:
+		{
+			if (doPickColorDialog(&added_face))
+			{
+				spl_pt_color[0] = GetRValue(added_face) / 255.0f;
+				spl_pt_color[1] = GetGValue(added_face) / 255.0f;
+				spl_pt_color[2] = GetBValue(added_face) / 255.0f;
+			}
+
+			break;
+		}
+		case E_HULLPT_CLR_BUTTON:
+		{
+			if (doPickColorDialog(&evaluated_point))
+			{
+				hull_pt_color[0] = GetRValue(evaluated_point) / 255.0f;
+				hull_pt_color[1] = GetGValue(evaluated_point) / 255.0f;
+				hull_pt_color[2] = GetBValue(evaluated_point) / 255.0f;
+			}
+			break;
+		}
+		case E_EXTPT_CLR_BUTTON:
+		{
+			if (doPickColorDialog(&exterior_point))
+			{
+				ext_pt_color[0] = GetRValue(exterior_point) / 255.0f;
+				ext_pt_color[1] = GetGValue(exterior_point) / 255.0f;
+				ext_pt_color[2] = GetBValue(exterior_point) / 255.0f;
+			}
+
+			break;
+		}
+
+		case E_INTPT_CLR_BUTTON:
+		{
+			if (doPickColorDialog(&interior_point))
+			{
+				int_pt_color[0] = GetRValue(interior_point) / 255.0f;
+				int_pt_color[1] = GetGValue(interior_point) / 255.0f;
+				int_pt_color[2] = GetBValue(interior_point) / 255.0f;
+			}
+
+			break;
+		}
+
 		default:
 		{
 			break;

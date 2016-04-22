@@ -25,6 +25,85 @@ bool check_collinear(Pt &a, Pt &b, Pt &c)
 	return false;
 }
 
+PT_ORIENT_T check_coplanar(Pt &p1, Pt &p2, Pt &p3, Pt &check)
+{
+	double	a = 0, b = 0, c = 0, d = 0;
+	double	distance = 0;
+	Pt		A, B, C;
+
+	A = p1;
+	B = p2;
+	C = p3;
+
+	a = ((B.Y() - A.Y()) * (C.Z() - A.Z())) -
+		((C.Y() - A.Y()) * (B.Z() - A.Z()));
+
+	b = ((B.Z() - A.Z()) * (C.X() - A.X())) -
+		((C.Z() - A.Z()) * (B.X() - A.X()));
+
+	c = ((B.X() - A.X()) * (C.Y() - A.Y())) -
+		((C.X() - A.X()) * (B.Y() - A.Y()));
+
+	d = -(a * A.X() + b * A.Y() + c * A.Z());
+
+	distance = (a* check.X() + b * check.Y() + c * check.Z() + d) /
+		(sqrt(a*a + b*b + c*c));
+
+	if ((distance > 0 - 0.0001) && (distance < 0 + 0.0001))
+	{
+		return E_EQUAL;
+	}
+	else if (distance < 0)
+	{
+		return E_BELOW;
+	}
+	else
+		return E_ABOVE;
+
+}
+
+bool init_pointswaps()
+{
+	PT_ORIENT_T	is_planar = E_EQUAL;
+
+	for (unsigned i = 3; i < pts.v_pts.size(); i++)
+	{
+		is_planar = check_coplanar(pts.v_pts[0], pts.v_pts[1],
+			pts.v_pts[2], pts.v_pts[i]);
+		if (E_EQUAL != is_planar)
+		{
+#if DEBUG
+			for (unsigned ct = 0; ct < pts.v_pts.size(); ct++)
+			{
+				cout << pts.v_pts[ct].getID() << " ";
+				pts.v_pts[ct].print_point_verbose();
+				cout << endl;
+			}
+#endif
+			std::swap(pts.v_pts[2], pts.v_pts[i]);
+			//cout << "Swapping 2 and " << i << endl;
+
+			pts.v_pts[2].setID(2);
+			pts.v_pts[i].setID(i);
+
+#if DEBUG
+			for (unsigned ct = 0; ct < pts.v_pts.size(); ct++)
+			{
+				cout << pts.v_pts[ct].getID() << " ";
+				pts.v_pts[ct].print_point_verbose();
+				cout << endl;
+			}
+#endif
+			break;
+		}
+	}
+	if (E_EQUAL == is_planar)
+	{
+		cout << "All points are on the plane\n";
+		return false;
+	}
+	return true;
+}
 err_code crt_2face_triangle(Pt &a, Pt &b, Pt &c)
 {
 	vector<int>	facet1_edges;
@@ -33,23 +112,23 @@ err_code crt_2face_triangle(Pt &a, Pt &b, Pt &c)
 
 	index = halfedges.find_halfedge(a, b);
 	facet1_edges.push_back(index);
-	halfedges.v_halfedges[index].print_halfedge(); cout << endl;
+	halfedges.v_halfedges[index].print_halfedge(); 
 	index = halfedges.find_halfedge(b, c);
 	facet1_edges.push_back(index);
-	halfedges.v_halfedges[index].print_halfedge(); cout << endl;
+	halfedges.v_halfedges[index].print_halfedge(); 
 	index = halfedges.find_halfedge(c, a);
 	facet1_edges.push_back(index);
-	halfedges.v_halfedges[index].print_halfedge(); cout << endl;
+	halfedges.v_halfedges[index].print_halfedge(); 
 
 	index = halfedges.find_halfedge(b, a);
 	facet2_edges.push_back(index);
-	halfedges.v_halfedges[index].print_halfedge(); cout << endl;
+	halfedges.v_halfedges[index].print_halfedge(); 
 	index = halfedges.find_halfedge(a, c);
 	facet2_edges.push_back(index);
-	halfedges.v_halfedges[index].print_halfedge(); cout << endl;
+	halfedges.v_halfedges[index].print_halfedge(); 
 	index = halfedges.find_halfedge(c, b);
 	facet2_edges.push_back(index);
-	halfedges.v_halfedges[index].print_halfedge(); cout << endl;
+	halfedges.v_halfedges[index].print_halfedge(); 
 
 	try
 	{

@@ -261,8 +261,8 @@ void get_solid_sphere()
 	float 	 mult = 0;
 	for (unsigned j = 0; j < 30; j++)
 	{
-		if (j % 4 == 0)
-			mult = 0.2;
+		if (j < 5)
+			mult = 0.3;
 		else
 			mult = 1;
 		Pt	P(solid_sphere[offset + i + j][0] * mult ,

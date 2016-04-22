@@ -30,7 +30,15 @@ typedef enum menu_IDList_T
 	E_INTPT_CLR_LISTBOX,
 	E_EXTPT_CLR_LISTBOX,
 	E_LINEPT_CLR_LISTBOX,
-	E_GEN_RAND_PTS
+	E_GEN_RAND_PTS,
+
+	E_HLPT_CLR_BUTTON,
+	E_FACE_CLR_BUTTON,
+	E_RFACE_CLR_BUTTON,
+	E_NEWFACE_CLR_BUTTON,
+	E_INTPT_CLR_BUTTON,
+	E_EXTPT_CLR_BUTTON,
+	E_HULLPT_CLR_BUTTON
 }IDlist;
 
 typedef enum CONFLICT_CODES_T
@@ -126,6 +134,16 @@ extern float solid_sphere[][3];
 extern float solid_tetrahedron[][3];
 extern float solid_cube[][3];
 
+/* Color values For color Dialog*/
+extern COLORREF hlt_point;
+extern COLORREF evaluated_point;
+extern COLORREF exterior_point;
+extern COLORREF interior_point;
+
+extern COLORREF normal_face;
+extern COLORREF deleted_face;
+extern COLORREF added_face;
+
 /* Generic Error code definition */
 typedef enum ERROR_CODE_T {
 	E_SUCCESS,
@@ -148,6 +166,8 @@ void get_solid_sphere();
 void get_hollow_tethdrn();
 void get_hollow_cube();
 void get_hollow_sphere();
+
+bool doPickColorDialog(COLORREF* color);
 
 
 

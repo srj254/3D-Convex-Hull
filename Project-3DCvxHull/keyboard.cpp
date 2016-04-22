@@ -22,7 +22,8 @@ void keyboard(unsigned char k, int x, int y)
 	}
 	else if (k == 'p' && state_index > -1)
 	{
-		state_index--;
+		if (state_index > 0)
+			state_index--;
 	}
 
 	/* Close application if ESC is pressed */

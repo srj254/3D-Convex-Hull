@@ -16,6 +16,7 @@ err_code draw_3dHull()
 {
 	unsigned 	i = 0, j = 0;
 	bool		is_collinear = true;
+	PT_ORIENT_T	is_planar = E_EQUAL;
 	err_code	err_status = E_SUCCESS;
 	
 	if (pts.v_pts.size() < 4)
@@ -39,6 +40,7 @@ err_code draw_3dHull()
 		cout << "All points are collinear\n";
 		exit(0);
 	}
+
 	err_status = halfedges.crt_allhalfedges();
 	err_status = crt_2face_triangle(pts.v_pts[0], pts.v_pts[1], 
 									pts.v_pts[2]);
@@ -80,7 +82,8 @@ err_code draw_3dHull()
 					cnflct_faces.push_back(faces.v_faces[j]);
 		
 		if (cnflct_faces.size() == 0)
-			cout << "No conflicting faces" << endl;
+			;
+		//cout << "No conflicting faces" << endl;
 
 		for (j = 0; j < cnflct_faces.size(); j++)
 		{

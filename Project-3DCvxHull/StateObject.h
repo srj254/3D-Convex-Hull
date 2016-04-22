@@ -5,6 +5,7 @@
 #include <set>
 #include "gen_codes.h"
 #include "Point.h"
+#include "Facet.h"
 
 typedef struct polygon_t
 {

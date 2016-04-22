@@ -120,6 +120,7 @@
     <ClInclude Include="StateObject.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ColorDialog.cpp" />
     <ClCompile Include="ConflictGraph.cpp" />
     <ClCompile Include="Facet.cpp" />
     <ClCompile Include="Halfedge.cpp" />
