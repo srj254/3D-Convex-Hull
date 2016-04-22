@@ -271,24 +271,49 @@ void glui_generic_cb(int id)
 		}
 		case E_GEN_RAND_PTS:
 		{
+			cout << "Generate Random Points" << endl;
+			//char object_names[][64] = {
+			//	"Hollow Sphere", "Solid Sphere",
+			//	"Hollow Cube", "Solid Cube",
+			//	"Hollow Tetrahedron", "Solid Tetrahedron" };
+
+			//int object_values[6] = { 0, 1, 2, 3, 4, 5 };
+
 			clearall();
-			int objType = objectList->get_int_val();
-			switch (objType)
+			switch (select_object)
 			{
-			case 0:
-				hollow_sphere[0][2]; break;
-			case 1: 
-				solid_sphere[0][2]; break;
-			case 2:
-				hollow_cube[0][2]; break;
-			case 3:
-				solid_cube[0][2]; break;
-			case 4:
-				hollow_tetrahedron[0][2]; break;
-			case 5:
-				solid_tetrahedron[0][2]; break;
-			default:
-				break;
+				case 0:
+				{
+					get_hollow_sphere();
+					break;
+				}
+				case 1: 
+				{
+					get_solid_sphere();
+					break;
+				}
+				case 2:
+				{
+					get_hollow_cube();
+					break;
+				}
+				case 3:
+				{
+					get_solid_cube();
+					break;
+				}
+				case 4:
+				{
+					get_hollow_tethdrn();
+					break;
+				}
+				case 5:
+				{
+					get_solid_tethdrn();
+					break;
+				}
+				default:
+					break;
 			}
 
 			break;

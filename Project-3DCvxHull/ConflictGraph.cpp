@@ -22,18 +22,42 @@ err_code ConflictGraph::update(vector<Pt>&	pt_vector,
 			for (i = 0; i < pt_vector.size(); i++)
 			{
 				if (E_NO_CNFLCT == face_vector[j].pt_face_cnflct[i])
+				{
+					e_orient = face_vector[j].eval_point(pt_vector[i]);
+					if (E_EQUAL == e_orient)
+					{
+						if (hull_ptIndex.end() == std::find(
+							hull_ptIndex.begin(),
+							hull_ptIndex.end(), i))
+						{
+							hull_ptIndex.push_back(i);
+						}
+					}
 					continue;
+				}
+					
 
 				if (pt_excl.end() != find(pt_excl.begin(), pt_excl.end(),
 					pt_vector[i]))
 				{
-					face_vector[j].pt_face_cnflct[i] = E_NO_CNFLCT;
+					e_orient = face_vector[j].eval_point(pt_vector[i]);
+					if (E_EQUAL == e_orient)
+					{
+						if (hull_ptIndex.end() ==
+							std::find(hull_ptIndex.begin(),
+								hull_ptIndex.end(), i))
+						{
+							hull_ptIndex.push_back(i);
+						}
+
+						face_vector[j].pt_face_cnflct[i] = E_NO_CNFLCT;
+					}
 				}
 				else
 				{
 					try {
 						e_orient = face_vector[j].eval_point(pt_vector[i]);
-						if (E_BELOW == e_orient)
+						if (E_BELOW == e_orient || E_EQUAL == e_orient)
 							face_vector[j].pt_face_cnflct[i] = E_NO_CNFLCT;
 						else
 							face_vector[j].pt_face_cnflct[i] = E_YES_CNFLCT;

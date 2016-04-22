@@ -21,6 +21,9 @@ err_code draw_3dHull()
 	if (pts.v_pts.size() < 4)
 		return E_SUCCESS;
 
+	if (states.v_stateObjects.size() != 0)
+		return E_SUCCESS;
+
 	for (i = 2; i < pts.v_pts.size(); i++)
 	{
 		is_collinear = check_collinear(pts.v_pts[0], pts.v_pts[1],
@@ -48,6 +51,7 @@ err_code draw_3dHull()
 	pt_excl.push_back(pts.v_pts[1]);
 	pt_excl.push_back(pts.v_pts[2]);
 	
+	hull_ptIndex.clear();
 	err_status = cnflct_graph.update(pts.v_pts, faces.v_faces, pt_excl);
 	if (E_SUCCESS != err_status)
 	{
@@ -57,7 +61,7 @@ err_code draw_3dHull()
 
 	{
 		StateObject		S;
-		S.store_faces(faces.v_faces, false);
+		S.store_faces(faces.v_faces, false, false);
 		S.set_exterior_pts();
 		states.add_state(S);
 	}
@@ -69,15 +73,8 @@ err_code draw_3dHull()
 		vector<int>			facet_edges;
 		Pt					p = pts.v_pts[i];
 		
-		cout << i << endl;
+		//cout << i << endl;
 		
-		{
-			StateObject		S;
-			S.store_faces(faces.v_faces, false);
-			S.set_highlight_pt(i);
-			states.add_state(S);
-		}
-
 		for (j = 0; j < faces.v_faces.size(); j++)
 				if (E_YES_CNFLCT == faces.v_faces[j].get_conflict_state(i))	
 					cnflct_faces.push_back(faces.v_faces[j]);
@@ -107,12 +104,12 @@ err_code draw_3dHull()
 
 		{
 			StateObject		S;
-			S.store_faces(cnflct_faces, true);
+			S.store_faces(cnflct_faces, true, false);
 
 			for (j = 0; j < cnflct_faces.size(); j++)
 				faces.removeFace(cnflct_faces[j]);
 			
-			S.store_faces(faces.v_faces, false);
+			S.store_faces(faces.v_faces, false, false);
 			S.set_highlight_pt(i);
 			S.store_horizon(horizon_edges);
 			//cout << "Before: " << states.v_stateObjects.size() << endl;
@@ -153,7 +150,7 @@ err_code draw_3dHull()
 			}
 			{
 				StateObject		S;
-				S.store_faces(faces.v_faces, false);
+				S.store_faces(faces.v_faces, false, true);
 				S.set_highlight_pt(i);
 				S.store_horizon(horizon_edges);
 				states.add_state(S);
@@ -162,14 +159,22 @@ err_code draw_3dHull()
 		}
 
 		pt_excl.push_back(p);
+		hull_ptIndex.clear();
 		err_status = cnflct_graph.update(pts.v_pts, faces.v_faces, 
 										 pt_excl);
+		{
+			StateObject		S;
+			S.store_faces(faces.v_faces, false, false);
+			S.set_highlight_pt(i);
+			states.add_state(S);
+		}
+
 		horizon_edges.clear();
 	}
 	{
 		StateObject		S;
-		S.store_faces(faces.v_faces, false);
-		S.set_exterior_pts();
+		S.store_faces(faces.v_faces, false, false);
+		S.set_exterior_pts(true);
 		states.add_state(S);
 	}
 

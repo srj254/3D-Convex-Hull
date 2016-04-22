@@ -79,9 +79,15 @@ pt_orient Facet::eval_point(Pt &p)
 	distance =	(a* p.X() + b * p.Y() + c * p.Z() + d) /
 				(sqrt(a*a + b*b + c*c));
 
-	if (distance <= 0)
+	if (distance > (0 - 0.0001) && distance < (0 + 0.0001))
+	{
+		return E_EQUAL;
+	}
+	else if (distance < 0)
+	{
 		return E_BELOW;
-	else
+	}
+	else 
 		return E_ABOVE;
 }
 

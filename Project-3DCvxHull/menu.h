@@ -22,6 +22,7 @@ err_code draw_3dHull();
 bool check_collinear(Pt &a, Pt &b, Pt &c);
 err_code crt_2face_triangle(Pt &a, Pt &b, Pt &c);
 void init_norm_face_color();
+void init_new_face_color();
 void init_remv_face_color();
 void init_norm_line_color();
 void init_horizon_line_color();

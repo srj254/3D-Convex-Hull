@@ -53,6 +53,7 @@ float			zoom	= 0.00;
 
 /* Globals for OpenGL drawing */
 GLubyte			ptIndex[MAX_POINTS];
+std::vector<int>	hull_ptIndex;
 int				nPts = 0;
 float			pointArray[MAX_POINTS * 3];
 float			ptColors[MAX_POINTS * 4];
@@ -65,10 +66,10 @@ char	read_filename[512] = { 0 };
 char	write_filename[512] = { 0 };
 int		interval = 1;
 int		select_mode = 0;
+int		select_object = 0;
 
 /* Global GLUI Handle */
 GLUI	*glui = NULL;
-GLUI_Listbox *objectList = NULL;
 GLUI_Listbox *hlt_pt_clrlist = NULL;
 GLUI_Listbox *int_pt_clrlist = NULL;
 GLUI_Listbox *ext_pt_clrlist = NULL;
@@ -82,6 +83,9 @@ GLUI_Checkbox *Z = NULL;
 /* Mouse and keyboard globals */
 int		mouse_curX = 0;
 int		mouse_curY = 0;
+
+/*Dummy */
+int dummy = 0;
 
 /** Main function */
 int main(int argc, char **argv)
@@ -167,21 +171,22 @@ int main(int argc, char **argv)
 					"Read Location", GLUI_EDITTEXT_TEXT, read_filename,
 					E_READFILE_BOX, glui_generic_cb);
 	read_file->set_w(200);
-	GLUI_EditText *write_file = glui->add_edittext_to_panel(fileOpsPanel, 
-					"Write Location", GLUI_EDITTEXT_TEXT, write_filename, 
-					E_WRITEFILE_BOX, glui_generic_cb);
-	write_file->set_w(200);
+	//GLUI_EditText *write_file = glui->add_edittext_to_panel(fileOpsPanel, 
+	//				"Write Location", GLUI_EDITTEXT_TEXT, write_filename, 
+	//				E_WRITEFILE_BOX, glui_generic_cb);
+	//write_file->set_w(200);
 	glui->add_column_to_panel(fileOpsPanel, false);
 
 	(glui->add_button_to_panel(fileOpsPanel, "Browse", E_READ_BROWSE, 
 					glui_generic_cb))->set_w(30);
 
-	glui->add_button_to_panel(fileOpsPanel, "Browse", E_WRITE_BROWSE, 
-					glui_generic_cb)->set_w(30);
+	//glui->add_button_to_panel(fileOpsPanel, "Browse", E_WRITE_BROWSE, 
+	//				glui_generic_cb)->set_w(30);
 	glui->add_column_to_panel(fileOpsPanel, false);
 	glui->add_button_to_panel(fileOpsPanel, "Read", E_READ_BUTTON,
 					glui_generic_cb)->set_w(30);
-	
+
+	if (false)
 	{
 		GLUI_Panel *clr_panel = glui->add_panel("Choose colors");
 		hlt_pt_clrlist = glui->add_listbox_to_panel(clr_panel,
@@ -224,13 +229,14 @@ int main(int argc, char **argv)
 	}
 
 	{
-		GLUI_Panel *obj_panel = glui->add_panel("3D Objects");
-		objectList = glui->add_listbox_to_panel(obj_panel,
-			"Select  ", NULL, E_OBJECT_LISTBOX, glui_generic_cb);
-		for (unsigned ii = 0; ii < 6; ii++)
-			objectList->add_item(ii, object_names[ii]);
 
-		glui->add_button_to_panel(obj_panel, "Generate points", -1,
+		GLUI_Panel *obj_panel = glui->add_panel("3D Objects");
+		GLUI_RadioGroup *objlist = glui->add_radiogroup_to_panel(obj_panel, 
+							&select_object, E_OBJECT_LISTBOX, glui_generic_cb);
+		for (unsigned ii = 0; ii < 6; ii++)
+			glui->add_radiobutton_to_group(objlist, object_names[ii]);
+		
+		glui->add_button_to_panel(obj_panel, "Generate points", E_GEN_RAND_PTS,
 			glui_generic_cb);
 	}
 

@@ -74,13 +74,34 @@ void display()
 		StateObject S = states.v_stateObjects.at(state_index);
 
 		getPtsInArray(); // Load the points into an array
-		for (unsigned i = 0; i < S.faces.size() && !b_wireframe; i++)
+		for (unsigned i = 0; i < S.polygon_faces.size() && !b_wireframe; i++)
 		{
-			tri_vertices[0] = S.faces.at(i).vertices[0];
-			tri_vertices[1] = S.faces.at(i).vertices[1];
-			tri_vertices[2] = S.faces.at(i).vertices[2];
+			tri_vertices[0] = S.polygon_faces.at(i).vertices[0];
+			tri_vertices[1] = S.polygon_faces.at(i).vertices[1];
+			tri_vertices[2] = S.polygon_faces.at(i).vertices[2];
 			
 			init_norm_face_color();
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_COLOR_ARRAY);
+			glVertexPointer(3, GL_FLOAT, 0, pointArray);
+			glColorPointer(4, GL_FLOAT, 0, ptColors);
+			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, tri_vertices);
+			glDisableClientState(GL_COLOR_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+
+			memset(tri_vertices, 0x00, 3 * sizeof(int));
+			memset(ptColors, 0x00, 4 * sizeof(float));
+		}
+		// Newly added face
+		if (S.has_new_face && !b_wireframe)
+		{
+			getPtsInArray(); // Load the points into an array
+			tri_vertices[0] = S.new_face.vertices[0];
+			tri_vertices[1] = S.new_face.vertices[1];
+			tri_vertices[2] = S.new_face.vertices[2];
+
+			init_new_face_color();
 
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_COLOR_ARRAY);
@@ -113,7 +134,7 @@ void display()
 			memset(tri_vertices, 0x00, 3 * sizeof(int));
 			memset(ptColors, 0x00, 4 * sizeof(float));
 		}
-
+		
 		getPtsInArray(); // Load the points into an array
 		for (unsigned i = 0; i < S.horizon_edges.size(); i++)
 		{

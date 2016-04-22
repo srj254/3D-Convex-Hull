@@ -43,6 +43,7 @@ typedef enum CONFLICT_CODES_T
 
 typedef enum PT_ORIENT_T {
 	E_BELOW,
+	E_EQUAL,
 	E_ABOVE,
 }pt_orient;
 
@@ -65,6 +66,7 @@ extern int		windowID;
 /* GLUI related live variables */
 extern int		interval;
 extern int		select_mode;
+extern int		select_object;
 extern char		read_filename[512];
 extern char		write_filename[512];
 
@@ -80,6 +82,7 @@ extern float	zoom;
 extern int			nPts;
 extern GLubyte		ptIndex[];
 extern float		pointArray[];
+extern std::vector<int>	hull_ptIndex;
 extern float		ptColors[];
 extern unsigned int	tri_vertices[];
 extern unsigned int	edg_vertices[];
@@ -89,6 +92,7 @@ extern float		color_values[][3];
 extern int			object_values[6];
 extern char			object_names[][64];
 extern float		normal_face_color[];
+extern float		new_face_color[];
 extern float		remv_face_color[];
 extern float		norm_line_color[];
 extern float		horizon_line_color[];
@@ -96,10 +100,10 @@ extern float		init_pt_color[];
 extern float		spl_pt_color[];
 extern float		ext_pt_color[];
 extern float		int_pt_color[];
+extern float		hull_pt_color[];
 
 /* Global GLUI handle */
 extern GLUI			*glui;
-extern GLUI_Listbox *objectList;
 extern GLUI_Listbox *hlt_pt_clrlist;
 extern GLUI_Listbox *int_pt_clrlist;
 extern GLUI_Listbox *ext_pt_clrlist;
@@ -135,6 +139,15 @@ void display();
 void idle();
 void init();
 void timerfunc(int value);
+
+/*Objects*/
+void get_solid_tethdrn();
+void get_solid_cube();
+void get_solid_sphere();
+
+void get_hollow_tethdrn();
+void get_hollow_cube();
+void get_hollow_sphere();
 
 
 

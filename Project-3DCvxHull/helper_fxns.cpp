@@ -101,6 +101,7 @@ void getPtsInArray()
 }
 
 float normal_face_color[4] = {0.6, 0.6, 0.6, 0.7};
+float new_face_color[4] = { 0.0, 0.3, 0.6, 0.7 };
 float remv_face_color[4] = { 0.3, 0.3, 0.3, 0.7 };
 float norm_line_color[4] = { 0.0, 0.0, 0.0, 0.3 }; 
 float horizon_line_color[4] = { 1.0, 1.0, 0.0, 1.0 };
@@ -108,6 +109,7 @@ float init_pt_color[4] = { 0.0, 0.0, 0.0, 0.7 };
 float spl_pt_color[4] = { 0, 0, 1.0, 0.7 };
 float ext_pt_color[4] = { 1, 0, 0.0, 0.7 };
 float int_pt_color[4] = { 0, 1, 0.0, 0.7 };
+float hull_pt_color[4] = { 0, 0, 0.0, 1.0 };
 
 void init_norm_face_color()
 {
@@ -120,6 +122,16 @@ void init_norm_face_color()
 	}
 }
 
+void init_new_face_color()
+{
+	for (unsigned i = 0; i < pts.v_pts.size(); i++)
+	{
+		ptColors[i * 4 + 0] = new_face_color[0];
+		ptColors[i * 4 + 1] = new_face_color[1];
+		ptColors[i * 4 + 2] = new_face_color[2];
+		ptColors[i * 4 + 3] = new_face_color[3];
+	}
+}
 
 void init_remv_face_color()
 {
@@ -176,13 +188,23 @@ void spl_point_colors(StateObject &S)
 			ptColors[i * 4 + 2] = ext_pt_color[2];
 			ptColors[i * 4 + 3] = ext_pt_color[3];
 		}
-		else
+		else if (std::find(S.interior_pts.begin(),
+							S.interior_pts.end(), i) !=
+							S.interior_pts.end())
 		{
 			ptColors[i * 4 + 0] = int_pt_color[0];
 			ptColors[i * 4 + 1] = int_pt_color[1]; // Red
 			ptColors[i * 4 + 2] = int_pt_color[2];
 			ptColors[i * 4 + 3] = int_pt_color[3];
 		}
+		else 
+		{
+			ptColors[i * 4 + 0] = hull_pt_color[0];
+			ptColors[i * 4 + 1] = hull_pt_color[1]; // Red
+			ptColors[i * 4 + 2] = hull_pt_color[2];
+			ptColors[i * 4 + 3] = hull_pt_color[3];
+		}
+
 	}
 }
 
@@ -375,10 +397,3 @@ float color_values[][3] = {
 { 1.000f, 1.000f, 0.000f },
 { 0.604f, 0.804f, 0.196f }
 };
-
-char object_names[][64] = { 
-	"Hollow Sphere", "Solid Sphere", 
-	"Hollow Cube", "Solid Cube", 
-	"Hollow Tetrahedron", "Solid Tetrahedron" };
-
-int object_values[6] = {0, 1, 2, 3, 4, 5};
